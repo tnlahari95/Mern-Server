@@ -31,9 +31,11 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('12345-67890-09876-54321'));
+
 function auth (req, res, next) {
-  console.log(req.headers);
+  console.log(req.signedCookies);
+  if (!req.signedCookies.user) {
   var authHeader = req.headers.authorization;
   if (!authHeader) {
       var err = new Error('You are not authenticated!');
@@ -54,6 +56,17 @@ function auth (req, res, next) {
       err.status = 401;
       next(err);
   }
+}
+else{
+  if (req.signedCookies.user === 'admin') {
+    next();
+  }
+  else {
+    var err = new Error('You are not authenticated!');
+    err.status = 401;
+    next(err);
+  }
+}
 }
 app.use(auth);
 app.use(express.static(path.join(__dirname, 'public')));
