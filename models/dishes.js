@@ -25,12 +25,10 @@ var commentSchema = new Schema({
 const dishSchema = new Schema({
     name: {
         type: String,
-        required: true,
         unique: true
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     image: {
         type: String
