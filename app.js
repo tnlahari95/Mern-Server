@@ -1,5 +1,5 @@
 var createError = require('http-errors');
-var express = require('express');
+//var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -9,13 +9,16 @@ var passport = require('passport');
 var authenticate = require('./routes/auth.js');
 var config = require('./config');
 
+const cors = require('cors');
 const url = config.mongoUrl;
-
+const express = require('express');
 const mongoose = require('mongoose');
 
-const Dishes = require('./models/dishes');
-const Promotions = require('./models/promotions');
-const Leaders = require('./models/leaders');
+//const Dishes = require('./models/dishes');
+//const Promotions = require('./models/promotions');
+//const Leaders = require('./models/leaders');
+//const Favorites = require('./models/favorites');
+const app = express();
 
 //const url = 'mongodb://localhost:27017/conFusion';
 const connect = mongoose.connect(url);
@@ -29,9 +32,11 @@ var dishRouter = require('./routes/dishRouter');
 var promotionRouter = require('./routes/promotionRouter');
 var leaderRouter = require('./routes/leaderRouter');
 var uploadRouter = require('./routes/uploadRouter');
+var favoritesRouter = require('./routes/favoritesRouter');
+var commentsRouter = require('./routes/commentsRouter');
 
 
-var app = express();
+//var app = express();
 
 // Secure traffic only
 app.all('*', (req, res, next) => {
@@ -62,6 +67,9 @@ app.use('/dishes',dishRouter);
 app.use('/promotions',promotionRouter);
 app.use('/leaders',leaderRouter);
 app.use('/imageupload',uploadRouter);
+app.use('/favorites', favoritesRouter);
+app.use('/comments',commentsRouter);
+app.use(cors());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

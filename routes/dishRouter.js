@@ -11,12 +11,12 @@ dishRouter.use(bodyParser.json());
 dishRouter.route('/')
 .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
 .get(cors.cors, (req,res,next) => {
-    Dishes.find({})
+    Dishes.find(req.query)
     .populate('comments.author')
-    .then((dishes) => {
+    .then((dish) => {// dishes to dish has been changed
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(dishes);
+        res.json(dish);//dishes to dish has been changed
     }, (err) => next(err))
     .catch((err) => next(err));
 })
@@ -81,7 +81,7 @@ dishRouter.route('/:dishId')
     .catch((err) => next(err));
 });
 
-dishRouter.route('/:dishId/comments')
+/*dishRouter.route('/:dishId/comments')
 .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
 .get(cors.cors, (req,res,next) => {
     Dishes.findById(req.params.dishId)
@@ -242,6 +242,6 @@ dishRouter.route('/:dishId/comments/:commentId')
         }
     }, (err) => next(err))
     .catch((err) => next(err));
-});
+});*/
 
 module.exports = dishRouter;
